@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OrderFlow | Management System</title>
+    <style>
+        /* CORE OFFLINE STYLES (Replacing Bootstrap) */
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #2ec4b6;
+            --danger: #e71d36;
+            --bg: #f4f7f6;
+            --text: #2b2d42;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0; padding: 0;
+        }
+
+        /* Navigation */
+        nav { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem 2rem;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container { 
+            max-width: 1100px; 
+            margin: 2rem auto; 
+            display: flex; gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        /* Layout Columns */
+        .inventory-col { flex: 2; }
+        .order-col { flex: 1.2; }
+
+        /* Card Styling */
+        .card { 
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header { 
+            padding: 1rem; 
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .card-body { padding: 1.5rem; }
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; background: #f8f9fa; padding: 12px; font-size: 0.85rem; }
+        td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+
+        /* Form Elements */
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+        input { 
+            width: 100%; padding: 10px; 
+            border: 1px solid #ddd; border-radius: 6px; 
+            box-sizing: border-box; 
+        }
+
+        button { 
+            width: 100%; background: var(--primary); color: white; 
+            border: none; padding: 12px; border-radius: 6px; 
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+
+        button:hover { background: var(--secondary); transform: translateY(-1px); }
+
+        /* Badges & Alerts */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; color: white; }
+        .bg-success { background: var(--success); }
+        .bg-danger { background: var(--danger); }
+        
+        .alert { 
+            padding: 12px; background: #e0f2fe; color: #0369a1;
+            border-radius: 6px; margin-bottom: 1rem; font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <strong>📦 OrderFlow</strong> | Management System
+    </nav>
+
+    <div class="container">
+        <!-- Inventory Management -->
+        <div class="inventory-col">
+            <div class="card">
+                <div class="card-header">Real-Time Inventory</div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>Product Name</th><th>Stock Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${products}">
+                                <td th:text="${p.id}"></td>
+                                <td th:text="${p.name}"></td>
+                                <td>
+                                    <span th:text="${p.quantity} + ' units'" 
+                                          th:class="${p.quantity < 3} ? 'badge bg-danger' : 'badge bg-success'">
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Processing -->
+        <div class="order-col">
+            <div class="card">
+                <div class="card-header">Process New Order</div>
+                <div class="card-body">
+                    <div th:if="${message}" class="alert" th:text="${message}"></div>
+                    
+                    <form action="/place" method="post">
+                        <div class="form-group">
+                            <label>Product ID</label>
+                            <input type="number" name="id" placeholder="e.g. 1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" name="qty" min="1" value="1" required>
+                        </div>
+                        <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:1rem; font-size:0.8rem;">
+                            💳 Payment: <strong>Auto-Authorized</strong>
+                        </div>
+                        <button type="submit">Confirm & Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
