@@ -7,6 +7,6 @@ spec:
     app: ecommerce-oms
   ports:
     - protocol: TCP
-      port: 80       # Port accessible from outside
-      targetPort: 9090 # Internal port where the app is listening
-  type: LoadBalancer # Task 4: Exposes the service to the internet
+      port: 80
+      targetPort: 9090
+  type: LoadBalancer
