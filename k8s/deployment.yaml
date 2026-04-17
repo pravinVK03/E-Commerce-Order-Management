@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce-oms
+  template:
+    metadata:
+      labels:
+        app: ecommerce-oms
+    spec:
+      containers:
+      - name: oms-container
+        image: pravinvk/ecommerce-order-service:latest
+        ports:
+        - containerPort: 9090
